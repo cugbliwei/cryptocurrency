@@ -14,6 +14,6 @@ resp = requests.post('http://47.100.172.107:80/otc/user/get', data=data)
 print(resp.json())
 '''
 
-data = {'coin_name': 'USDT', 'nickname': '环球资本'}
+data = {'coin_name': 'USDT', 'nickname': '币圈爱丽丝'}
 resp = requests.post('http://47.100.172.107:80/otc/rank', data=data)
 print(resp.json())

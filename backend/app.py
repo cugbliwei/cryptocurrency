@@ -51,7 +51,7 @@ async def otc_profile(request):
 async def otc_predict(request):
     data = await request.post()
     coin_name = data['coin_name']
-    nickname = data['nick_name']
+    nickname = data['nickname']
     results = api.otc_rank(coin_name, nickname)
     return web.json_response(results)
 
