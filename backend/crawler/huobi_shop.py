@@ -77,6 +77,8 @@ def fetch_coin(trade_type, coin_id, coin_name, currPage):
         pay_name = ''
         for pay_type in payMethod.split(','):
             pay_name += pays[pay_type] + ','
+        if pay_name:
+            pay_name = pay_name[0:len(pay_name) - 1]
 
         merchantTags = d.get('merchantTags', [])
         landun = 0
