@@ -89,8 +89,11 @@ def fetch_coin(trade_type, coin_id, coin_name, currPage):
         # print(trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, price)
         rank += 1
 
-    sql = 'insert into otc_origin(trade_type,coin_name,rank_cnt,user_name,trade_month_times,order_complete_rate,trade_count,min_trade_limit,max_trade_limit,price) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) on duplicate key update user_name=values(user_name),trade_month_times=values(trade_month_times),order_complete_rate=values(order_complete_rate),trade_count=values(trade_count),min_trade_limit=values(min_trade_limit),max_trade_limit=values(max_trade_limit),pay_type=values(pay_type),pay_name=values(pay_name),landun=values(landun),price=values(price)'
-    db.insertmany(sql, values)
+    sql = 'insert into otc_origin(trade_type,coin_name,rank_cnt,user_name,trade_month_times,order_complete_rate,trade_count,min_trade_limit,max_trade_limit,price) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) on duplicate key update user_name=values(user_name),trade_month_times=values(trade_month_times),order_complete_rate=values(order_complete_rate),trade_count=values(trade_count),min_trade_limit=values(min_trade_limit),max_trade_limit=values(max_trade_limit),pay_type=values(pay_type),pay_name=values(pay_name),landun=values(landun),price=values(price)'
+    resp = db.insertmany(sql, values)
+    if resp:
+        print(resp)
+        return
 
     totalPage = rj.get('totalPage', 1)
     if currPage < totalPage:
