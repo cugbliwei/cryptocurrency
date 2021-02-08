@@ -34,7 +34,8 @@ class myThread(threading.Thread):
 def fetch_coin(trade_type, coin_id, coin_name, currPage):
     link = 'https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=%s&currency=1&tradeType=%s&currPage=%d&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=' % (coin_id, trade_type, currPage)
     print(link)
-    rj = requests.get(link, headers=headers, proxies=get_proxy()).json()
+    # rj = requests.get(link, headers=headers, proxies=get_proxy()).json()
+    rj = requests.get(link, headers=headers).json()
     data = rj.get('data', [])
     values = []
     rank = (currPage - 1) * 10 + 1
@@ -47,18 +48,17 @@ def fetch_coin(trade_type, coin_id, coin_name, currPage):
         maxTradeLimit = d.get('maxTradeLimit', '')
         price = d.get('price', '')
         values.append((trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, price))
-        print(trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, price)
+        # print(trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, price)
         rank += 1
 
     sql = 'insert into otc_origin(trade_type,coin_name,rank_cnt,user_name,trade_month_times,order_complete_rate,trade_count,min_trade_limit,max_trade_limit,price) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) on duplicate key update user_name=values(user_name),trade_month_times=values(trade_month_times),order_complete_rate=values(order_complete_rate),trade_count=values(trade_count),min_trade_limit=values(min_trade_limit),max_trade_limit=values(max_trade_limit),price=values(price)'
     db.insertmany(sql, values)
 
     totalPage = rj.get('totalPage', 1)
-    '''
     if currPage < totalPage:
         fetch_coin(trade_type, coin_id, coin_name, currPage + 1)
-    '''
 
+    '''
     if currPage == 1 and currPage < totalPage:
         threads = []
         for page_index in range(2, totalPage + 1):
@@ -68,6 +68,7 @@ def fetch_coin(trade_type, coin_id, coin_name, currPage):
             t.start()
         for t in threads:
             t.join()
+    '''
 
 
 def fetch_proxy():
@@ -83,19 +84,26 @@ def fetch_proxy():
 
 def fetch_coins():
     now = int(time.time())
+    sql = 'delete from otc_origin'
+    db.execute(sql)
+
     coins = {'BTC': '1', 'ETH': '3', 'USDT': '2', 'LTC': '8', 'HT': '4', 'HUSD': '6', 'EOS': '5', 'XRP': '7'}
     trade_types = ['sell', 'buy']
-    threads = []
+    # threads = []
     for trade_type in trade_types:
         for coin_name, coin_id in coins.items():
-            # fetch_coin(trade_type, coin_id, coin_name, 1)
+            fetch_coin(trade_type, coin_id, coin_name, 1)
+            '''
             t = myThread(trade_type, coin_id, coin_name, 1)
             threads.append(t)
+            '''
 
+    '''
     for t in threads:
         t.start()
     for t in threads:
         t.join()
+    '''
 
     end = int(time.time())
     print('花费耗时:', end - now)
@@ -117,11 +125,10 @@ if __name__ == '__main__':
         fetch_proxy()
 
         refresh_time = res[0][0]
-        print(refresh_time)
+        # print(refresh_time)
         now_time = time.time()
         if now_time - last_update_time < refresh_time:
             continue
 
         print('%s start to refresh data...' % (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
         fetch_coins()
-        break
