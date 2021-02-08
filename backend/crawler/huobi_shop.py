@@ -8,7 +8,7 @@ from db import db
 
 
 headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36'}
-pays = {'1': '银行卡', '2': '支付宝', '3': '微信'}
+pays = {'1': '银行卡', '2': '支付宝', '3': '微信', '5': '西联汇款'}
 proxies = []
 
 
