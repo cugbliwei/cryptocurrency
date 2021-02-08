@@ -18,6 +18,21 @@ def set_profile(refresh_time):
     return db.execute(sql)
 
 
+def otc_rank(coin_name, nickname):
+    results = {}
+    for trade_type in ['sell', 'buy']:
+        sql = "select price,trade_count,rank_cnt from otc_origin where trade_type='%s' and coin_name='%s' and user_name='%s'" % (trade_type, coin_name, nickname)
+        data = db.query(sql)
+        ret = []
+        for res in data:
+            price = res[0]
+            trade_count = res[1]
+            rank_cnt = res[2]
+            ret.append({'price': price, 'trade_count': trade_count, 'rank_cnt': rank_cnt})
+        results[trade_type] = ret
+    return results
+
+
 def otc_sumary(coin_name):
     results = {}
     for trade_type in ['sell', 'buy']:

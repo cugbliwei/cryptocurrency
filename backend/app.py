@@ -47,13 +47,13 @@ async def otc_profile(request):
         return web.json_response({'status': False, 'msg': '设置失败'})
 
 
-@routes.post('/otc/predict')
+@routes.post('/otc/rank')
 async def otc_predict(request):
     data = await request.post()
-    account = data['account']
-    password = data['password']
-    print(account, password)
-    return web.json_response({})
+    coin_name = data['coin_name']
+    nickname = data['nick_name']
+    results = api.otc_rank(coin_name, nickname)
+    return web.json_response(results)
 
 
 @routes.post('/otc/sumary')
