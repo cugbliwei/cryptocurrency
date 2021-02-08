@@ -8,7 +8,33 @@ from db import db
 
 
 headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36'}
-pays = {'1': '银行卡', '2': '支付宝', '3': '微信', '5': '西联汇款'}
+pays = {
+    "1": "银行卡",
+    "2": "支付宝",
+    "3": "微信",
+    "4": "Pal",
+    "5": "西联汇款",
+    "6": "SWIFT",
+    "7": "Now",
+    "8": "tm",
+    "9": "QIWI",
+    "10": "Interac e-Transfer",
+    "11": "IMPS",
+    "12": "UPI",
+    "13": "NETELLER",
+    "17": "转数快",
+    "19": "Yandex",
+    "20": "ADVCash",
+    "21": "现金存款",
+    "22": "DuitNow",
+    "23": "Me",
+    "24": "EER",
+    "25": "阿尔法银行",
+    "26": "俄罗斯标准银行",
+    "27": "俄罗斯外贸银行",
+    "28": "俄罗斯商业银行",
+    "29": "俄罗斯联邦储蓄银行"
+}
 proxies = []
 
 
