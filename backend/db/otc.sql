@@ -9,6 +9,9 @@ CREATE TABLE `otc_origin` (
   `trade_count` varchar(50) DEFAULT NULL,
   `min_trade_limit` varchar(50) DEFAULT NULL,
   `max_trade_limit` varchar(50) DEFAULT NULL,
+  `pay_type` varchar(50) DEFAULT NULL,
+  `pay_name` varchar(50) DEFAULT NULL,
+  `landun` int(11) DEFAULT 0,
   `price` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

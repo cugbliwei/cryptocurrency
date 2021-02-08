@@ -48,7 +48,10 @@ def get_origin(coin_name):
             trade_count = res[6]
             min_trade_limit = res[7]
             max_trade_limit = res[8]
-            price = res[9]
-            ret.append({'coin_name': coin_name, 'rank_cnt': rank_cnt, 'user_name': user_name, 'trade_month_times': trade_month_times, 'order_complete_rate': order_complete_rate, 'trade_count': trade_count, 'min_trade_limit': min_trade_limit, 'max_trade_limit': max_trade_limit, 'price': price})
+            pay_type = res[9]
+            pay_name = res[10]
+            landun = res[11]
+            price = res[12]
+            ret.append({'coin_name': coin_name, 'rank_cnt': rank_cnt, 'user_name': user_name, 'trade_month_times': trade_month_times, 'order_complete_rate': order_complete_rate, 'trade_count': trade_count, 'min_trade_limit': min_trade_limit, 'max_trade_limit': max_trade_limit, 'pay_type': pay_type, 'pay_name': pay_name, 'landun': landun, 'price': price})
         results[trade_type] = ret
     return results

@@ -8,6 +8,7 @@ from db import db
 
 
 headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36'}
+pays = {'1': '银行卡', '2': '支付宝', '3': '微信'}
 proxies = []
 
 
@@ -46,12 +47,21 @@ def fetch_coin(trade_type, coin_id, coin_name, currPage):
         tradeCount = d.get('tradeCount', '')
         minTradeLimit = d.get('minTradeLimit', '')
         maxTradeLimit = d.get('maxTradeLimit', '')
+        payMethod = d.get('payMethod', '')
+        pay_name = ''
+        for pay_type in payMethod.split(','):
+            pay_name += pays[pay_type] + ','
+
+        merchantTags = d.get('merchantTags', [])
+        landun = 0
+        if merchantTags and merchantTags[0] == 1:
+            landun = 1
         price = d.get('price', '')
-        values.append((trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, price))
+        values.append((trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, payMethod, pay_name, landun, price))
         # print(trade_type, coin_name, rank, userName, tradeMonthTimes, orderCompleteRate, tradeCount, minTradeLimit, maxTradeLimit, price)
         rank += 1
 
-    sql = 'insert into otc_origin(trade_type,coin_name,rank_cnt,user_name,trade_month_times,order_complete_rate,trade_count,min_trade_limit,max_trade_limit,price) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) on duplicate key update user_name=values(user_name),trade_month_times=values(trade_month_times),order_complete_rate=values(order_complete_rate),trade_count=values(trade_count),min_trade_limit=values(min_trade_limit),max_trade_limit=values(max_trade_limit),price=values(price)'
+    sql = 'insert into otc_origin(trade_type,coin_name,rank_cnt,user_name,trade_month_times,order_complete_rate,trade_count,min_trade_limit,max_trade_limit,price) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) on duplicate key update user_name=values(user_name),trade_month_times=values(trade_month_times),order_complete_rate=values(order_complete_rate),trade_count=values(trade_count),min_trade_limit=values(min_trade_limit),max_trade_limit=values(max_trade_limit),pay_type=values(pay_type),pay_name=values(pay_name),landun=values(landun),price=values(price)'
     db.insertmany(sql, values)
 
     totalPage = rj.get('totalPage', 1)
